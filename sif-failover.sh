@@ -3,13 +3,12 @@
 # Aaron J. Prisk 2021
 # For unplanned host failure or cluster degradation
 
-# IMPORT SIF CONF
-source sif.conf
-
-# PRIMARY AND SECONDARY PING CHECK
-echo "WARNING. HOST PAIR NOT RESPONDING"
-echo "Trying secondary option..."
-echo "HOST PAIR DOWN. Starting Fail-Over VM process."
+# Pre Failover Checks and Timers
+# Give possibly frozen or misbehaving server time to release VM resources
+# Default is VM_TIMEOUT in sif.conf multiplied by a factor of 2
+echo "Sleeping for 2 VM Timeout Cycles to give host time to gracefully shut down VMs"
+sleep $VM_TIMEOUT
+sleep $VM_TIMEOUT
 
 # DEFINE HOST PAIR VMS
 cd host1xml
