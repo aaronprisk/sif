@@ -3,7 +3,7 @@
 # Part of SIF stack that runs at boot time.
 
 # Import SIF Config
-source sif.conf
+source /opt/sif/sif.conf
 
 # Check for failflag in shared directory.
 failfile=$SHAREDIR/siflog/failflag
@@ -18,4 +18,4 @@ else
 fi
 
 # Start SIF Watcher
-source sif-watcher.sh
+source /opt/sif/sif-watcher.sh
