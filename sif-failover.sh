@@ -13,13 +13,13 @@ sleep $VM_TIMEOUT
 cd $SHAREDIR/sifxml/$PAIRID
 for f in *
 do
-    echo "Defining VM - $f" && virsh define $vm.xml
+    echo "Defining VM - $f" && virsh define $f
 done
 
 # Start VMs
 for f in *
 do
-    echo "Starting VM - $f" && virsh start $vm
+    echo "Starting VM - $f" && virsh start $f
 done
 
 # Create Failover Flag

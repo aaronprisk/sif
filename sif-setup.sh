@@ -27,7 +27,9 @@ esac
 
 # SIF preflight-checks here.
 # Connect to other host.
-# Assign hostids and pairids.
+# Assign HOSTID and PAIRID
+# Add hosts into /etc/hosts/
+# Use ssh-copy to securely connect virsh ssh
 
 echo "--------------------------------------"
 echo "All test passed successfully!"
