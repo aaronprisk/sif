@@ -1,117 +1,86 @@
 #!/bin/bash
-# Aaron J Prisk 2021
 # SIF Watcher
 # Service that monitors connecitivty and uptime of paired SIF hosts
 
-#Import SIF config
-source sif.conf
+# Start Watcher Loop
+while true
+do
+	echo "Checking Local Network Stack"
 
-echo "Checking Local Network Stack"
+	ping -c1 localhost > /dev/null
+	if [ $? -eq 0 ]
+	  then
+	    echo "SUCCESS: This host has active networking."
+	  else
+	    echo "FAILURE: Error starting networking on localhost"
+	    exit 0;
+	fi
 
-ping -c1 localhost > /dev/null
-if [ $? -eq 0 ]
-  then
-    echo "SUCCESS: This host has active networking."
-  else
-    echo "FAILURE: Error starting networking on localhost"
-    exit 0;
-fi
+        # Start ping checks of defined addresses
 
-ping -c1 $PAIRHOST > /dev/null
-if [ $? -eq 0 ]
-  then
-    echo "SUCCESS: Host pair is active."
-    echo "SUCCESS: Watcher Service will check back in $PING_INTERVAL seconds."
-    exit 0
-  else
-    echo "WARNING: Host pair is NOT Active."
-fi
+	ping -c1 $PAIRHOST > /dev/null
+	if [ $? -eq 0 ]
+	  then
+	    echo "SUCCESS: Host pair is active."
+	    echo "SUCCESS: Watcher Service will check back in $PING_INTERVAL seconds."
+            sleep $PING_INTERVAL
+	  else
+	    echo "WARNING: Host pair is NOT Active. Trying Fail Safe check."
+	    ping -c1 $FAILHOST > /dev/null
+	    if [ $? -eq 0 ]
+	      then
+	        echo "SUCCESS: Failsafe interface is active."
+	        echo "SUCCESS: Watcher Service will check back in $PING_INTERVAL seconds."
+                sleep $PING_INTERVAL
+	      else
+	        echo "WARNING: Failsafe interface is NOT Active."
+		ping -c1 $FAILGW > /dev/null
+		if [ $? -eq 0 ]
+		  then
+		    echo "SUCCESS: Gateway is active."
+		  else
+		    echo "WARNING: Gateway is NOT Active."
+		fi
+	    fi
+	fi
 
-# If this section is reached, the first ping attempt failed. Second attempt - Attempting secondary FAILHOST IP.
+	# ------------------------------------------------------------------------------------
+	# If this checks fail, system will perform checks again.
+	# Host waits for PING_INTERVAL before performing test.
+	# ------------------------------------------------------------------------------------
 
-ping -c1 $FAILHOST > /dev/null
-if [ $? -eq 0 ]
-  then
-    echo "SUCCESS: Failsafe interface is active."
-    echo "SUCCESS: Watcher Service will check back in $PING_INTERVAL seconds."
-    exit 0
-  else
-    echo "WARNING: Failsafe interface is NOT Active."
-fi
+	echo "WARNING: Starting second check after configured ping interval - $PING_INTERVAL seconds"
+	sleep $PING_INTERVAL
 
-# If this section is reached, the second attempt failed - Attempting Gateway Test IP
+	ping -c1 $PAIRHOST > /dev/null
+	if [ $? -eq 0 ]
+	  then
+	    echo "SUCCESS: Host pair is active."
+	    echo "SUCCESS: Watcher Service will check back in $PING_INTERVAL seconds."
+            sleep $PING_INTERVAL
+	  else
+	    echo "WARNING: Host pair is NOT Active. Trying Fail Safe check."
+	    ping -c1 $FAILHOST > /dev/null
+	    if [ $? -eq 0 ]
+	      then
+	        echo "SUCCESS: Failsafe interface is active."
+	        echo "SUCCESS: Watcher Service will check back in $PING_INTERVAL seconds."
+                sleep $PING_INTERVAL
+	      else
+	        echo "WARNING: Failsafe interface is NOT Active."
+		ping -c1 $FAILGW > /dev/null
+		if [ $? -eq 0 ]
+		  then
+		    echo "SUCCESS: Gateway is active."
+                    # Assume pair host is degraded. Start Failover procedure.
+                    source sif-failover.sh
+		  else
+                    # Assume host is degraded. Start fail prep procedure.
+		    echo "WARNING: Gateway is NOT Active."
+                    source sif-failprep.sh
 
-ping -c1 $FAILGW > /dev/null
-if [ $? -eq 0 ]
-  then
-    echo "SUCCESS: Gateway is active."
-  else
-    echo "WARNING: Gateway is NOT Active."
-fi
+		fi
+	    fi
+	fi
 
-# ------------------------------------------------------------------------------------
-# Perform Final Check. If this check fails, the system will begin failover procedures.
-# Host waits for PING_INTERVAL before performing final test.
-# ------------------------------------------------------------------------------------
-
-echo "WARNING: Starting second check after configured ping interval - $PING_INTERVAL seconds"
-sleep $PING_INTERVAL
-
-ping -c1 localhost > /dev/null
-if [ $? -eq 0 ]
-  then
-    echo "SUCCESS: This host has active networking."
-  else
-    echo "FAILURE: Error starting networking on localhost"
-    echo "Ensure networking is enabled on this host and try SIF Setup again."
-    exit 0;
-fi
-
-# Second Host Pair Check
-
-ping -c1 $PAIRHOST > /dev/null
-if [ $? -eq 0 ]
-  then
-    echo "SUCCESS: Host pair is active."
-    echo "SUCCESS: Watcher Service will check back in $PING_INTERVAL seconds."
-    exit 0
-  else
-    echo "WARNING: Host pair is NOT Active."
-fi
-
-# Second Fail Host Check.
-
-ping -c1 $FAILHOST > /dev/null
-if [ $? -eq 0 ]
-  then
-    echo "SUCCESS: Failsafe interface is active."
-    echo "SUCCESS: Watcher Service will check back in $PING_INTERVAL seconds."
-    exit 0
-  else
-    echo "WARNING: Failsafe interface is NOT Active."
-fi
-
-# Second Gateway Check.
-
-ping -c1 $FAILGW > /dev/null
-if [ $? -eq 0 ]
-  then
-    echo "SUCCESS: Gateway is active."
-  else
-    echo "WARNING: Gateway is NOT Active."
-    echo "FAILOVER: THIS HOST IS DEGRADED"
-    echo "FAILOVER: FAILOVER PROCEDURE WILL NOW START."
-    source sif-failprep.sh
-    exit 0
-fi
-
-#-------------------------------------------------------------"
-# FAILOVER PREP AND INITIATION
-#-------------------------------------------------------------
-
-echo "---------------------------------------------------------"
-echo "FAILOVER: PAIRED HOST $PAIRHOST IS DOWN."
-echo "FAILOVER: FAILOVER PROCEDURE WILL NOW START."
-echo "---------------------------------------------------------"
-source sif-failover.sh
-exit 0
+done

@@ -1,0 +1,12 @@
+[Unit]
+Description=SIF
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/opt/sif/sif-boot.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

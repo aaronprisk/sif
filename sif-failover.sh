@@ -1,6 +1,5 @@
 #!/bin/bash
 # SIF Failover Script
-# Aaron J. Prisk 2021
 # For unplanned host failure or cluster degradation
 
 # Pre Failover Checks and Timers
@@ -10,32 +9,46 @@ echo "Sleeping for 2 VM Timeout Cycles to give host time to gracefully shut down
 sleep $VM_TIMEOUT
 sleep $VM_TIMEOUT
 
-# DEFINE HOST PAIR VMS
-cd host1xml
+# Define Host Pair VMs
+cd $SHAREDIR/sifxml/$PAIRID
 for f in *
 do
-    echo "Defining VM - $f"
+    echo "Defining VM - $f" && virsh define $vm.xml
 done
 
-# START VMS
+# Start VMs
 for f in *
 do
-    echo "Starting VM - $f"
+    echo "Starting VM - $f" && virsh start $vm
 done
 
 # Create Failover Flag
-touch /mnt/vm/sif/failflag
-echo $PAIRHOST > /mnt/vm/sif/failflag
+touch $SHAREDIR/siflog/failflag
+echo $PAIRID > $SHAREDIR/siflog/failflag
 
 # Create Failover Log
-faillog=/mnt/vm/sif/log/failover-$(date +"%Y-%m-%d")
+faillog=$SHAREDIR/siflog/failover-$(date +"%Y-%m-%d")
 touch $faillog
-echo "CRITICAL: Host failover triggered. Host at $PAIRHOST down at $(date)" >> $faillog
-echo "The following VMs were migrated to active host:" >> $faillog
+printf "\nFAILOVER: Host failover triggered. Host at $PAIRHOST down at $(date)" >> $faillog
+printf "\nFAILOVER: The following VMs were migrated to active host:" >> $faillog
 
 for f in *
 do
-    echo "$f " >> $faillog
+    echo -n "$f " >> $faillog
 done
 
+# Move to Restoration Phase
+while [ -f $SHAREDIR/siflog/failflag ]
+do
+	echo "FAILOVER: Fail Flag still present. Pausing until next check."
+        sleep $PING_INTERVAL
+done
 
+# Initiate Live Migration and SIF Cluster restoration
+echo "FAILOVER: Fail Flag no longer present. Starting cluster restoration."
+echo Migrating all transient VMs to $PAIRHOST
+for VMS in `virsh list --transient --name`; do echo Migrating VM $VMS live && virsh migrate --live --persistent --undefinesource $VMS qemu+ssh://$PAIRHOST/system; done
+
+# Update Failover Log
+# Add error checking logic here to ensure restoration was successful.
+printf "\nRESTORATION: Restoration Complete at $(date)" >> $faillog
