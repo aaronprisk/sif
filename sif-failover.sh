@@ -9,11 +9,11 @@ echo "Sleeping for 2 VM Timeout Cycles to give host time to gracefully shut down
 sleep $VM_TIMEOUT
 sleep $VM_TIMEOUT
 
-# Define Host Pair VMs
+# Create Host Pair VMs from XML
 cd $SHAREDIR/sifxml/$PAIRID
 for f in *
 do
-    echo "Defining VM - $f" && virsh define $f
+    echo "Defining VM - $f" && virsh create $f
 done
 
 # Start VMs
