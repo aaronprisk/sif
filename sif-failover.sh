@@ -13,7 +13,7 @@ sleep $VM_TIMEOUT
 cd $SHAREDIR/sifxml/$PAIRID
 for f in *
 do
-    echo "Defining VM - $f" && virsh create $f
+    echo "Creating VM domain - $f" && virsh create $f
 done
 
 # Start VMs
