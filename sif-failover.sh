@@ -47,7 +47,7 @@ done
 # Initiate Live Migration and SIF Cluster restoration
 echo "FAILOVER: Fail Flag no longer present. Starting cluster restoration."
 echo Migrating all transient VMs to $PAIRHOST
-for VMS in `virsh list --transient --name`; do echo Migrating VM $VMS live && virsh migrate --live --persistent --undefinesource $VMS qemu+ssh://$PAIRHOST/system; done
+for VMS in `virsh list --transient --name`; do echo Migrating VM $VMS live && virsh migrate --live --persistent --undefinesource --unsafe $VMS qemu+ssh://$PAIRHOST/system; done
 
 # Update Failover Log
 # Add error checking logic here to ensure restoration was successful.
