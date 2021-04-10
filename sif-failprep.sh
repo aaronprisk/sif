@@ -4,7 +4,7 @@
 
 for VMS in 'virsh list --name';
 do
-    echo "FAILOVER: Shutting down VM: $VMS" && virsh shutdown VMS --mode acpi
+    echo "FAILOVER: Shutting down VM: $VMS" && virsh shutdown $VMS --mode acpi
 done
 
 #--------------------------------------------------------
@@ -16,7 +16,7 @@ sleep $VM_TIMEOUT
 
 for VMS in 'virsh list --name';
 do
-    echo "FAILOVER: Shutting down VM: $VMS" && virsh destroy VMS --graceful
+    echo "FAILOVER: Shutting down VM: $VMS" && virsh destroy $VMS --graceful
 done
 
 #-----------------------------------------------------------
