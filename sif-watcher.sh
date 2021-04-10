@@ -73,11 +73,11 @@ do
 		  then
 		    echo "SUCCESS: Gateway is active."
                     # Assume pair host is degraded. Start Failover procedure.
-                    source sif-failover.sh
+                    source /opt/sif/sif-failover.sh
 		  else
                     # Assume host is degraded. Start fail prep procedure.
 		    echo "WARNING: Gateway is NOT Active."
-                    source sif-failprep.sh
+                    source /opt/sif/sif-failprep.sh
 
 		fi
 	    fi
