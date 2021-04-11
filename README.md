@@ -4,7 +4,7 @@
 
 **S**imple **I**ntegrated **F**ailover
 
-**SIF** is a simple tool for dual host KVM clusters. It's intended to be a turnkey, hands free tool for keeping your virtual machines highly available and limiting downtime in the case of a host failure.
+**SIF** is a simple HA tool for dual host KVM clusters. It's intended to be a turnkey, hands free tool for keeping your virtual machines highly available and limiting downtime in the case of a host failure.
 
 ## System Requirements
 SIF should run on most modern Linux distributions, but there are a few important requirements:
