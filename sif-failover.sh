@@ -47,10 +47,9 @@ done
 # Initiate Live Migration and SIF Cluster restoration
 echo "FAILOVER: Fail Flag no longer present. Starting cluster restoration."
 echo Migrating all transient VMs to $PAIRHOST
-for VMS in `virsh list --transient --name`; do echo Migrating VM $VMS live && virsh migrate --live --persistent --undefinesource --unsafe $VMS qemu+ssh://$PAIRHOST/system; done
+for VMS in `virsh list --transient --name`; do echo Migrating VM $VMS live && virsh migrate --live --persistent --undefinesource $VMS qemu+ssh://$PAIRHOST/system; done
 #--------------------------------------------------------------------------------
-# Currently using --unsafe option as vms that didn't shutdown gracefully will fail to migrate without it. Adjustments will be needed later.
-# Add additional error checking logic here to ensure restoration was successful.
+# --unsafe option can be added to force move VMs with cache mode not set to NONE
 #--------------------------------------------------------------------------------
 
 # Update Failover Log
