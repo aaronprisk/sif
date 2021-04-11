@@ -11,7 +11,7 @@ SIF should run on most modern Linux distributions, but there are a few important
 * KVM with libvirt
 * systemd
 * openssh server on both hosts
-* Configured shared storage (NFS or iscsi)
+* Configured shared storage (EX: NFS or iSCSI)
 
 ## Installation
 To install SIF, download or use git clone to download files.
