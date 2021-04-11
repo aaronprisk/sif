@@ -47,6 +47,8 @@ echo "*Creating SIF Directory"
 mkdir /opt/sif
 echo "*Copying SIF Scripts"
 cp $wd/* /opt/sif/ > /dev/null
+echo "*Setting execute bit for SIF scripts"
+chmod +x /opt/sif/sif*
 echo "*Copying service file"
 cp $wd/sif.service /lib/systemd/system/
 echo "*Registering service"
