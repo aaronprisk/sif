@@ -5,7 +5,7 @@
 # Pre Failover Checks and Timers
 # Give possibly frozen or misbehaving server time to release VM resources
 # Default is VM_TIMEOUT in sif.conf multiplied by a factor of 2
-echo "Sleeping for 2 VM Timeout Cycles to give host time to gracefully shut down VMs"
+echo "FAILOVER: Sleeping for 2 VM Timeout Cycles to give host time to gracefully shut down VMs"
 sleep $VM_TIMEOUT
 sleep $VM_TIMEOUT
 
@@ -46,7 +46,7 @@ done
 
 # Initiate Live Migration and SIF Cluster restoration
 echo "FAILOVER: Fail Flag no longer present. Starting cluster restoration."
-echo Migrating all transient VMs to $PAIRHOST
+echo "FAILOVER: Migrating all transient VMs to $PAIRHOST"
 for VMS in `virsh list --transient --name`; do echo Migrating VM $VMS live && virsh migrate --live --persistent --undefinesource $VMS qemu+ssh://$PAIRHOST/system; done
 #--------------------------------------------------------------------------------
 # --unsafe option can be added to force move VMs with cache mode not set to NONE
