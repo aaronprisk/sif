@@ -13,6 +13,10 @@ SIF should run on most modern Linux distributions, but there are a few important
 * openssh server on both hosts
 * Configured shared storage (EX: NFS or iSCSI)
 
+Please check the wiki for best practices and other setup tips.
+
+Distros tested: RHEL 8.3, Debian 10, Debian 11
+
 ## Installation
 To install SIF, download or use git clone to download files.
 
