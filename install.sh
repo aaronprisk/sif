@@ -135,11 +135,13 @@ fi
 
 echo "STEP 7) VM METADATA EXPORT"
 echo "*Exporting existing VM metadata"
-for x in /etc/libvirt/qemu/
+for x in $(virsh list --name);
 do
-    echo "Exporting VM - $x" && sudo bash -c 'virsh dumpxl > $sharedir/$hostid/$x'
+    echo "Exporting - $x" && virsh dumpxml $x > $sharedir/sifxml/$hostid/$x 
 done
+echo "*Exporting Complete"
 
+echo
 echo "*Starting SIF service"
 systemctl daemon-reload
 systemctl enable sif
