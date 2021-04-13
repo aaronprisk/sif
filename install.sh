@@ -123,6 +123,23 @@ echo "Please follow the prompts to setup SSH Key authentication."
 ssh-keygen -t rsa
 ssh-copy-id root@$pairip
 
+echo "STEP 6) FIREWALL SETUP"
+echo "*Creating Firewall Exceptions for live migration"
+if [ -f /etc/redhat-release ]; then
+  firewall-cmd --add-port=49152-49216/tcp --zone=public --permanent
+  firewall-cmd --reload
+fi
+if [ -f /etc/lsb-release ]; then
+   iptables -I INPUT -p tcp -m tcp --dport 49152:49216 -j ACCEPT
+fi
+
+echo "STEP 7) VM METADATA EXPORT"
+echo "*Exporting existing VM metadata"
+for x in /etc/libvirt/qemu/
+do
+    echo "Exporting VM - $x" && sudo bash -c 'virsh dumpxl > $sharedir/$hostid/$x'
+done
+
 echo "*Starting SIF service"
 systemctl daemon-reload
 systemctl enable sif
