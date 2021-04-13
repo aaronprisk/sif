@@ -18,9 +18,9 @@ Please check the [wiki](https://github.com/aaronprisk/sif/wiki) for best practic
 Distros tested: RHEL 8.3, Debian 10, Debian 11
 
 ## Installation
-To install SIF, download or use git clone to download files.
+To install SIF, download files via a web browser or use git clone.
 
-Then simply run:
+Browse to sif directory, then simply run:
 ```
 chmod +x install.sh && ./install.sh
 ```
