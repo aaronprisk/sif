@@ -55,8 +55,10 @@ if [ migtype == 1 ]
         echo "*Starting persistent migration of all VMs to $PAIRHOST"
         echo "*Attempting live migration for powered on VMs"
         for VMS in `virsh list --name`; do echo Migrating VM $VMS live && virsh migrate --live --persistent --undefinesource $VMS qemu+ssh://$PAIRHOST/system; done
-        echo "*Attempting offline migration for powered off VMs."
+        echo "*Attempting offline migration for any powered off VMs."
         for VMS in `virsh list --all --name`; do echo Migrating VM $VMS offline && virsh migrate --offline --persistent --undefinesource $VMS qemu+ssh://$PAIRHOST/system; done
 fi
+echo
+echo "-------------------------------------------" 
 echo "SIF Migration has completed."
 echo "If any VMs failed to migrate, please resolve error and run migration again."
