@@ -9,13 +9,15 @@ echo
 echo "This SIF tool will migrate all VMs from this host to pair host." 
 echo "1) TRANSIENT - Temporary transfer of RUNNING VMs to pair host."
 echo "2) PERSISTENT - Longer term transfer of ALL VMS to pair host."
+echo "3) EXIT"
 
 while true; do
     read -p "What type of migration do you want to perform?(1 or 2): " migtype
     case $migtype in
         [1]* ) break;;
         [2]* ) break;;
-        * ) echo "Please answer 1 or 2.";;
+        [3]* ) exit 0; break;;
+        * ) echo "Please select available option.";;
     esac
 done
 
