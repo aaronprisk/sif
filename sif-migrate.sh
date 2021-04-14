@@ -1,6 +1,13 @@
 #!/bin/bash
 # SIF Migrate Script
 # Initiated during planned migration of all VMs
+if [ $EUID != 0 ]; then
+    sudo "$0" "$@"
+    exit $?
+fi
+
+# Import SIF Config
+source /opt/sif/sif.conf
 
 echo "***********************************************************"
 echo "***************** SIF PLANNED MIGRATION *******************"
