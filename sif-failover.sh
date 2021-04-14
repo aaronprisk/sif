@@ -4,13 +4,16 @@
 
 # Pre Failover Checks and Timers
 # Give possibly frozen or misbehaving server time to release VM resources
-# Default is VM_TIMEOUT in sif.conf multiplied by a factor of 2
-echo "FAILOVER: Sleeping for 2 VM Timeout Cycles to give host time to gracefully shut down VMs"
-sleep $VM_TIMEOUT
-sleep $VM_TIMEOUT
+# Default is VM_TIMEOUT in sif.conf multiplied by number of VMs
+cd $SHAREDIR/sifxml/$PAIRID
+count=0
+for v in *
+do
+    count=$((count + 1))
+done
+echo "Sleeping for $count VM Time cycles " && sleep $((VM_TIMEOUT * count))
 
 # Create Host Pair VMs from XML
-cd $SHAREDIR/sifxml/$PAIRID
 for f in *
 do
     echo "Creating VM domain - $f" && virsh create $f
