@@ -25,17 +25,15 @@ if [ $? -eq 0 ]
   then
     echo "SUCCESS: This host has active networking."
   else
-    echo "FAILURE: Error starting networking on localhost"
+    echo "FAILURE: Error starting networking on localhost. Please check connectivity and try migration again."
     exit 0;
 fi
 ping -c1 $PAIRHOST > /dev/null
 if [ $? -eq 0 ]
   then
     echo "SUCCESS: Host pair is active."
-    echo "SUCCESS: Watcher Service will check back in $PING_INTERVAL seconds."
-          sleep $PING_INTERVAL
   else
-      echo "FAILURE: Host pair is not responding. Please check connectivity and try again."
+      echo "FAILURE: Host pair is not responding. Please check connectivity and try migration again."
       exit 0;
 fi
 echo "-------------------------------------------"  
