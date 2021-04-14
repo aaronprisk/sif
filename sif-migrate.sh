@@ -13,7 +13,7 @@ echo "***********************************************************"
 echo "***************** SIF PLANNED MIGRATION *******************"
 echo "***********************************************************"
 echo
-echo "This SIF tool will migrate all VMs from this host to pair host." 
+echo "This SIF tool is for migrating VMs between pair hosts." 
 echo "1) TRANSIENT - Temporary transfer of RUNNING VMs to pair host."
 echo "2) PERSISTENT - Longer term transfer of ALL VMS to pair host."
 echo "3) EXIT"
@@ -58,7 +58,6 @@ if [ migtype == 1 ]
         echo "*Attempting offline migration for any powered off VMs."
         for VMS in `virsh list --all --name`; do echo Migrating VM $VMS offline && virsh migrate --offline --persistent --undefinesource $VMS qemu+ssh://$PAIRHOST/system; done
 fi
-echo
 echo "-------------------------------------------" 
 echo "SIF Migration has completed."
 echo "If any VMs failed to migrate, please resolve error and run migration again."
