@@ -140,6 +140,8 @@ do
     echo "Exporting - $x" && virsh dumpxml $x > $sharedir/sifxml/$hostid/$x 
 done
 echo "*Exporting Complete"
+echo "*Setting nightly cron task"
+crontab -l | { cat; echo "0 0 * * * /opt/sif/sif-xml.sh"; } | crontab -
 
 echo
 echo "*Starting SIF service"
