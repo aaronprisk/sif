@@ -135,7 +135,7 @@ fi
 
 echo "STEP 7) VM METADATA EXPORT"
 echo "*Exporting existing VM metadata"
-for x in $(virsh list --name);
+for x in $(virsh list --persistent --name);
 do
     echo "Exporting - $x" && virsh dumpxml $x > $sharedir/sifxml/$hostid/$x 
 done
