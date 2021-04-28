@@ -5,14 +5,14 @@
 # Start Watcher Loop
 while true
 do
-	echo "Checking Local Network Stack"
+	echo "INFO: Checking Local Network Stack"
 
 	ping -c1 localhost > /dev/null
 	if [ $? -eq 0 ]
 	  then
 	    echo "SUCCESS: This host has active networking."
 	  else
-	    echo "FAILURE: Error starting networking on localhost"
+	    echo "WARNING: Error starting networking on localhost"
 	    exit 0;
 	fi
 
@@ -49,7 +49,7 @@ do
 	# Host waits for PING_INTERVAL before performing test.
 	# ------------------------------------------------------------------------------------
 
-	echo "WARNING: Starting second check after configured ping interval - $PING_INTERVAL seconds"
+	echo "INFO: Starting second check after configured ping interval - $PING_INTERVAL seconds"
 	sleep $PING_INTERVAL
 
 	ping -c1 $PAIRHOST > /dev/null
