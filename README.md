@@ -1,4 +1,4 @@
-![sif logo](https://github.com/aaronprisk/sif/blob/main/sif.png)
+![sif logo](https://github.com/aaronprisk/sif/blob/main/sif-logo.png)
 
 
 
