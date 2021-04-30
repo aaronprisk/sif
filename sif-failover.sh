@@ -16,13 +16,7 @@ echo "Sleeping for $count VM Time cycles " && sleep $((VM_TIMEOUT * count))
 # Create Host Pair VMs from XML
 for f in *
 do
-    echo "Creating VM domain - $f" && virsh create $f
-done
-
-# Start VMs
-for f in *
-do
-    echo "Starting VM - $f" && virsh start $f
+    echo "Creating VM domain and starting - $f" && virsh create $f
 done
 
 # Create Failover Flag
