@@ -15,7 +15,7 @@ SIF should run on most modern Linux distributions, but there are a few important
 
 Please check the [wiki](https://github.com/aaronprisk/sif/wiki) for best practices and FAQs.
 
-Distros tested: RHEL 8.3, Debian 10, Debian 11
+Distros tested: RHEL 8.4, Debian 10, Debian 11
 
 ## Installation
 To install SIF, download files via a web browser or use git clone.
